@@ -69,7 +69,6 @@ axios.interceptors.request.use((reqConfig) => {
 axios.interceptors.response.use((resConfig) => {
     //  隐藏loading组件, 如果requestCounter 不是0，就 减去1
     hideLoading();
-    console.log('before response');
     return resConfig;
 }, (error) => {
     // const newError = error;
