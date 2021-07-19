@@ -10,7 +10,7 @@
 import axios from 'axios';
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Spin } from 'antd';
+import { Modal, Spin } from 'antd';
 
 //  服务器站点
 axios.defaults.baseURL = '/api/v1';
@@ -72,56 +72,85 @@ axios.interceptors.response.use((resConfig) => {
     console.log('before response');
     return resConfig;
 }, (error) => {
-    const newError = error;
-
+    // const newError = error;
+    // const newError = {
+    //     'code': 0,
+    //     'reason': '',
+    //     'message': '',
+    // };
     //  隐藏loading组件, 如果requestCounter 不是0，就 减去1
+    let errobj = error.response.data;
     hideLoading();
 
-    if (error && error.response) {
-        switch (error.response.status) {
-            case 400:
-                newError.message = '错误请求';
-                break;
-            case 401:
-                newError.message = '未授权，请重新登录';
-                break;
-            case 403:
-                newError.message = '拒绝访问';
-                break;
-            case 404:
-                newError.message = '请求错误,未找到该资源';
-                break;
-            case 405:
-                newError.message = '请求方法未允许';
-                break;
-            case 408:
-                newError.message = '请求超时';
-                break;
-            case 500:
-                newError.message = '服务器端出错';
-                break;
-            case 501:
-                newError.message = '网络未实现';
-                break;
-            case 502:
-                newError.message = '网络错误';
-                break;
-            case 503:
-                newError.message = '服务不可用';
-                break;
-            case 504:
-                newError.message = '网络超时';
-                break;
-            case 505:
-                newError.message = 'http版本不支持该请求';
-                break;
-            default:
-                newError.message = `连接错误${ error.response.status }`;
-        }
-    } else {
-        newError.message = '连接到服务器失败';
-    }
-    return Promise.reject(newError.message);
+    Modal.error({
+        title: `Request Error Code: ${ errobj.code }`,
+        // content: err,
+        content: `Reason: ${ errobj.reason }. \nMessage: ${ errobj.message }.`,
+    });
+
+    return Promise.reject(error);
+
+    // if (error && error.response) {
+    //     console.log('before err: ', error.response);
+    //     newError.message = error.response.data.message;
+    //     switch (error.response.status) {
+    //         case 400:
+    //             console.log('400 err');
+    //             newError.code = 400;
+    //             newError.reason = '错误请求';
+    //             break;
+    //         case 401:
+    //             newError.code = 401;
+    //             newError.reason = '未授权，请重新登录';
+    //             break;
+    //         case 403:
+    //             newError.code = 403;
+    //             newError.reason = '拒绝访问';
+    //             break;
+    //         case 404:
+    //             newError.code = 404;
+    //             newError.reason = '请求错误,未找到该资源';
+    //             break;
+    //         case 405:
+    //             newError.code = 405;
+    //             newError.reason = '请求方法未允许';
+    //             break;
+    //         case 408:
+    //             newError.code = 408;
+    //             newError.reason = '请求超时';
+    //             break;
+    //         case 500:
+    //             newError.code = 500;
+    //             newError.reason = '服务器端出错';
+    //             break;
+    //         case 501:
+    //             newError.code = 501;
+    //             newError.reason = '网络未实现';
+    //             break;
+    //         case 502:
+    //             newError.code = 502;
+    //             newError.reason = '网络错误';
+    //             break;
+    //         case 503:
+    //             newError.code = 503;
+    //             newError.reason = '服务不可用';
+    //             break;
+    //         case 504:
+    //             newError.code = 504;
+    //             newError.reason = '网络超时';
+    //             break;
+    //         case 505:
+    //             newError.code = 505;
+    //             newError.reason = 'http版本不支持该请求';
+    //             break;
+    //         default:
+    //             newError.code = 500;
+    //             newError.reason = `连接错误${ error.response.status }`;
+    //     }
+    // } else {
+    //     newError.reason = '连接到服务器失败';
+    // }
+
 });
 
 export default axios;

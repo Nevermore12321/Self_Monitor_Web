@@ -22,10 +22,11 @@ function axiosGet(url, params) {
         axios.get(url, params).then((res) => {
             resolve(res);
         }, (err) => {
-            Modal.error({
-                title: 'Request Error!',
-                content: err,
-            });
+            // Modal.error({
+            //     title: 'Request Error!',
+            //     // content: err,
+            //     content: `Reason: ${ err.reason }. Message: ${ err.message }`,
+            // });
             reject(err);
         });
     });
@@ -42,10 +43,10 @@ function axiosPost(url, data) {
         axios.post(url, data).then((res) => {
             resolve(res);
         }, (err) => {
-            Modal.error({
-                title: 'Request Error!',
-                content: err,
-            });
+            // Modal.error({
+            //     title: 'Request Error!',
+            //     content: err,
+            // });
             reject(err);
         });
     });

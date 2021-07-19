@@ -23,7 +23,7 @@ function LoginForm(props) {
     const { loginStatusState, loginStatusDispatch } = useContext(GlobalContext);
 
     const onFinish = (values) => {
-        console.log('login finish');
+        console.log('login start');
         // todo:
         //  1.设置 isLogin = true
         //  2. 发送请求并验证
